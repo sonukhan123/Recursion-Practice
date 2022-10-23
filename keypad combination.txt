@@ -1,0 +1,75 @@
+
+#include <iostream>
+#include<string>
+#include<vector>
+using namespace std;
+string arr[10]={"abc","def","ghi","jkl","mnop","qrst","uv","wxyz",",;","?!"};
+
+vector<string>* get_keypad(string num,int i){
+    int j;
+    if(i==num.length()){
+
+        return nullptr;
+    }
+    vector<string> *p=get_keypad(num,i+1);
+                //cout<<"i == "<<i;
+
+    if(p==nullptr){
+        int n = num[i]-48;
+           // cout<<"i == "<<i;
+        p=new vector<string>();
+        for(j=0;j<arr[n-1].length();j++){
+            p->push_back( *(new string(1, arr[n-1][j]) ) );
+            //cout<<p->back()<<" ";
+        }
+    }
+    else{
+        int n = num[i]-48;
+        //cout<<"i == "<<i;
+        int index=0;
+        int my_size=p->size() * arr[n-1].length();
+        vector<string> v;
+        vector<string>::iterator it1=p->begin();
+        for(j=0; j< p->size(); j++,it1++){
+            v.push_back( *it1 );
+           // cout<<v.back();
+        }
+        it1=v.begin();
+        vector<string>::iterator it2=p->begin();
+
+        for(j=1; j<=my_size; j++ ){
+            if(it1==v.end())
+                it1=v.begin();
+            if( index>0 ){
+                p->push_back( arr[n-1][index] + *it1 );
+                //cout<<"["<<*it1<<"]";
+                //cout<<p->back()<<" j "<<j<<" index="<<index;
+                it1++;
+                //it2++;
+            }
+            else{
+                *it2= arr[n-1][index] + *it1;
+                it2++;
+                it1++;
+            }
+            if(j%v.size() == 0)
+                index++;
+        }
+
+
+    }
+    return p;
+}
+
+
+int main()
+{
+    string s="749";
+    vector<string> *p=get_keypad(s,0);
+    int i=0;
+    vector<string>::iterator it=p->begin();
+    for(it=p->begin(),i=0;it<p->end();it++,i++)
+cout<<*it<<" "<<i<<",";
+
+    return 0;
+}
